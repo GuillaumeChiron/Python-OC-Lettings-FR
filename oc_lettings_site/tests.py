@@ -1,7 +1,10 @@
+from django.contrib.auth.models import User
 from django.test import Client, TestCase, override_settings
-from django.urls import path
+from django.urls import path, reverse
 
+from lettings.models import Address, Letting
 from oc_lettings_site.urls import urlpatterns as base_urlpatterns
+from profiles.models import Profile
 
 
 def erroring_view(request):
@@ -35,3 +38,57 @@ class ErrorPagesTest(TestCase):
         response = client.get("/boom/")
         self.assertEqual(response.status_code, 500)
         self.assertTemplateUsed(response, "500.html")
+
+
+class SiteIntegrationTests(TestCase):
+    """Parcours utilisateur global : accueil -> lettings -> profiles."""
+
+    def setUp(self):
+        self.client = Client()
+        self.address = Address.objects.create(
+            number=12,
+            street="rue Example",
+            city="New York",
+            state="NY",
+            zip_code=75000,
+            country_iso_code="USA",
+        )
+        self.letting = Letting.objects.create(
+            title="Cozy Apartment", address=self.address
+        )
+        self.user = User.objects.create_user(
+            username="jdoe",
+            first_name="John",
+            last_name="Doe",
+            email="jdoe@example.com",
+        )
+        self.profile = Profile.objects.create(user=self.user, favorite_city="Paris")
+
+    def test_full_site_user_journey(self):
+        # Accueil : présente des liens vers lettings et profiles
+        response = self.client.get(reverse("index"))
+        self.assertEqual(response.status_code, 200)
+        lettings_index_url = reverse("lettings:index")
+        profiles_index_url = reverse("profiles:index")
+        self.assertContains(response, lettings_index_url)
+        self.assertContains(response, profiles_index_url)
+
+        # Accueil -> liste des lettings -> détail d'une location
+        response = self.client.get(lettings_index_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.letting.title)
+
+        letting_detail_url = reverse("lettings:letting", args=[self.letting.id])
+        response = self.client.get(letting_detail_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.address.street)
+
+        # Accueil -> liste des profiles -> détail d'un profile
+        response = self.client.get(profiles_index_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.user.username)
+
+        profile_detail_url = reverse("profiles:profile", args=[self.user.username])
+        response = self.client.get(profile_detail_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.profile.favorite_city)
