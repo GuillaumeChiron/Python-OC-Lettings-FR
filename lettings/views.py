@@ -1,3 +1,5 @@
+"""Views permettant le rendu des pages html des lettings"""
+
 from django.shortcuts import render, get_object_or_404
 from lettings.models import Letting
 

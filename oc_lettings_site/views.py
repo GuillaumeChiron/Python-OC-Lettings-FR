@@ -1,3 +1,5 @@
+"""Views permettant le rendu des pages html du site"""
+
 from django.shortcuts import render
 
 
