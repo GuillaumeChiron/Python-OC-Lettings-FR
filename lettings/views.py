@@ -6,6 +6,8 @@ from lettings.models import Letting
 # massa. Integer est nunc, pulvinar a tempor et, bibendum id arcu. Vestibulum ante ipsum primis in
 # faucibus orci luctus et ultrices posuere cubilia curae; Cras eget scelerisque
 def index(request):
+    """Page de rendu de toutes les locations dans la page lettings/index.html"""
+
     lettings_list = Letting.objects.all()
     context = {"lettings_list": lettings_list}
     return render(request, "lettings/index.html", context)
@@ -21,6 +23,8 @@ def index(request):
 # risus. Mauris condimentum auctor elementum. Donec quis nisi ligula. Integer vehicula tincidunt
 # enim, ac lacinia augue pulvinar sit amet.
 def letting(request, letting_id):
+    """Page de rendu d'une seule location dans la page lettings/letting.html"""
+
     letting = get_object_or_404(Letting, id=letting_id)
     context = {
         "title": letting.title,

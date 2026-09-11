@@ -1,8 +1,15 @@
+"""modele des classes de l'app lettings : adresses et locations"""
+
 from django.db import models
 from django.core.validators import MaxValueValidator, MinLengthValidator
 
 
 class Address(models.Model):
+    """adresse postale associé à une location
+
+    ``state`` attend un code à 2 chiffres et ``country_iso_code```
+    un code ISO sur 3 lettres"""
+
     number = models.PositiveIntegerField(validators=[MaxValueValidator(9999)])
     street = models.CharField(max_length=64)
     city = models.CharField(max_length=64)
@@ -20,6 +27,11 @@ class Address(models.Model):
 
 
 class Letting(models.Model):
+    """location ratachée à une adresse
+
+    une location possède une unique adresse avec une relation
+    ``OneToOneField``"""
+
     title = models.CharField(max_length=256)
     address = models.OneToOneField(Address, on_delete=models.CASCADE)
 
