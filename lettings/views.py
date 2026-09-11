@@ -23,7 +23,8 @@ def index(request):
 # risus. Mauris condimentum auctor elementum. Donec quis nisi ligula. Integer vehicula tincidunt
 # enim, ac lacinia augue pulvinar sit amet.
 def letting(request, letting_id):
-    """Page de rendu d'une seule location dans la page lettings/letting.html"""
+    """Page de rendu d'une seule location dans la page lettings/letting.html
+    en cas d'erreur renvoie la page 404.html"""
 
     letting = get_object_or_404(Letting, id=letting_id)
     context = {
