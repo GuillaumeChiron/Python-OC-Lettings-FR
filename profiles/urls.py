@@ -1,7 +1,9 @@
-from django.urls import path
+"""Mise en place des routes d'accès pour les profiles"""
 
+from django.urls import path
 from profiles import views
 
+"""Nom de référence pour les routes profiles"""
 app_name = "profiles"
 
 urlpatterns = [

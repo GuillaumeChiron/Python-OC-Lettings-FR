@@ -6,6 +6,8 @@ from profiles.models import Profile
 # pulvinar eget. Fusc faucibus, urna quis auctor pharetra, massa dolor cursus neque, quis dictum
 # lacus d
 def index(request):
+    """Page de rendu de tous les profiles dans la page profiles/index.html"""
+
     profiles_list = Profile.objects.all()
     context = {"profiles_list": profiles_list}
     return render(request, "profiles/index.html", context)
@@ -16,6 +18,9 @@ def index(request):
 # tristique lacus, it. Nam aliquam dignissim congue. Pellentesque habitant morbi tristique senectus
 # et netus et males
 def profile(request, username):
+    """Page de rendu d'un seul profile dans la page profiles/profile.html
+    en cas d'erreur renvoie la page 404.html"""
+
     profile = get_object_or_404(Profile, user__username=username)
     context = {"profile": profile}
     return render(request, "profiles/profile.html", context)
