@@ -41,6 +41,10 @@ Le projet utilise un fichier `.env` (non versionné, à la racine du projet) pou
   - `SECRET_KEY` : clé de signature interne à Django (sessions, tokens CSRF, etc.), obligatoire. Générer une valeur avec :
     `python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"`
   - `DEBUG` : `True` en local pour afficher les erreurs détaillées, doit être `False` en production.
+  - `SENTRY_DSN` : optionnelle. Si elle est absente, Sentry est simplement désactivé (le site fonctionne normalement, sans remontée d'erreurs). Pour l'obtenir :
+    1. Créer un compte sur [sentry.io](https://sentry.io).
+    2. Créer un projet de plateforme **Django**.
+    3. Récupérer le DSN dans le projet : **Settings → Projects → *(votre projet)* → Client Keys (DSN)**.
 
 #### Exécuter le site
 
