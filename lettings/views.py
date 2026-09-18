@@ -1,7 +1,12 @@
 """Views permettant le rendu des pages html des lettings"""
 
+import logging
+
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from lettings.models import Letting
+
+logger = logging.getLogger(__name__)
 
 
 # Aenean leo magna, vestibulum et tincidunt fermentum, consectetur quis velit. Sed non placerat
@@ -10,6 +15,7 @@ from lettings.models import Letting
 def index(request):
     """Page de rendu de toutes les locations dans la page lettings/index.html"""
 
+    logger.info("Consultation de la liste des locations")
     lettings_list = Letting.objects.all()
     context = {"lettings_list": lettings_list}
     return render(request, "lettings/index.html", context)
@@ -28,7 +34,11 @@ def letting(request, letting_id):
     """Page de rendu d'une seule location dans la page lettings/letting.html
     en cas d'erreur renvoie la page 404.html"""
 
-    letting = get_object_or_404(Letting, id=letting_id)
+    try:
+        letting = get_object_or_404(Letting, id=letting_id)
+    except Http404:
+        logger.warning("Location introuvable : id=%s", letting_id)
+        raise
     context = {
         "title": letting.title,
         "address": letting.address,

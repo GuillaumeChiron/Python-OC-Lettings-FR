@@ -1,9 +1,11 @@
+import logging
 import os
 from dotenv import load_dotenv
 
 from pathlib import Path
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
 
 load_dotenv()
 
@@ -20,9 +22,14 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
+sentry_logging = LoggingIntegration(
+    level=logging.INFO,
+    event_level=logging.WARNING,
+)
+
 sentry_sdk.init(
     dsn=os.environ.get("SENTRY_DSN"),
-    integrations=[DjangoIntegration()],
+    integrations=[DjangoIntegration(), sentry_logging],
     send_default_pii=False,
     traces_sample_rate=1.0,
     environment="development" if DEBUG else "production",
