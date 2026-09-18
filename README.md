@@ -32,6 +32,16 @@ Dans le reste de la documentation sur le développement local, il est supposé q
 - Confirmer que la commande `pip` exécute l'exécutable pip dans l'environnement virtuel, `which pip`
 - Pour désactiver l'environnement, `deactivate`
 
+#### Variables d'environnement
+
+Le projet utilise un fichier `.env` (non versionné, à la racine du projet) pour sa configuration sensible.
+
+- Copier `.env.example` vers `.env` : `cp .env.example .env`
+- Renseigner les valeurs suivantes dans `.env` :
+  - `SECRET_KEY` : clé de signature interne à Django (sessions, tokens CSRF, etc.), obligatoire. Générer une valeur avec :
+    `python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"`
+  - `DEBUG` : `True` en local pour afficher les erreurs détaillées, doit être `False` en production.
+
 #### Exécuter le site
 
 - `cd /path/to/Python-OC-Lettings-FR`
