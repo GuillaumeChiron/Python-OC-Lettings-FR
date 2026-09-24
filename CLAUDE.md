@@ -139,6 +139,8 @@ le site (apparence + fonctionnalités, admin inclus) ne doit pas changer.
 - [ ] Choisir l'hébergeur de production (Render / AWS Elastic Beanstalk ou App Runner /
       Azure App Service, etc.) — **décision à valider avec l'utilisateur avant
       implémentation**, impacte le job de déploiement.
+      → **Décision (2026-09-24) : Render**, déploiement de l'image Docker Hub
+      `guillaumechiron/oc-lettings`.
 - [ ] Écrire `Dockerfile` (image de prod : dépendances, collectstatic, gunicorn) et
       idéalement un `docker-compose.yml` pour lancer facilement en local.
       - ⚠️ `SECRET_KEY` : ne **jamais** écrire `ENV SECRET_KEY=...` dans le Dockerfile
