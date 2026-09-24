@@ -4,5 +4,4 @@ venv
 .env
 .pytest_cache/
 .coverage
-.coveragerc
 staticfiles/

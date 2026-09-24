@@ -6,6 +6,7 @@ from pathlib import Path
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
+from django.core.exceptions import ImproperlyConfigured
 
 load_dotenv()
 
@@ -18,6 +19,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
+if not SECRET_KEY:
+    raise ImproperlyConfigured(
+        "La variable d'environnement SECRET_KEY doit être définie."
+    )
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "False") == "True"

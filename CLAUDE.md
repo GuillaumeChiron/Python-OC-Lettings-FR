@@ -141,10 +141,21 @@ le site (apparence + fonctionnalités, admin inclus) ne doit pas changer.
       implémentation**, impacte le job de déploiement.
 - [ ] Écrire `Dockerfile` (image de prod : dépendances, collectstatic, gunicorn) et
       idéalement un `docker-compose.yml` pour lancer facilement en local.
+      - ⚠️ `SECRET_KEY` : ne **jamais** écrire `ENV SECRET_KEY=...` dans le Dockerfile
+        (la clé serait gravée dans l'image publiée sur Docker Hub). La passer au lancement :
+        `docker run --env-file .env ...` ou `-e SECRET_KEY=...`. Ne pas copier `.env`
+        dans l'image (`.dockerignore`).
+      - ⚠️ `settings.py` lève `ImproperlyConfigured` si `SECRET_KEY` est absente (fail fast) :
+        `collectstatic` au build a donc besoin d'une clé temporaire limitée à la commande :
+        `RUN SECRET_KEY=build-only python manage.py collectstatic --noinput`.
 - [ ] Mettre en place GitHub Actions (`.github/workflows/ci.yml` ou similaire) avec 3 jobs :
       1. **build-and-test** : setup Python, install `requirements.txt` (+ dev deps),
          `flake8`, `pytest` avec couverture, échec si couverture < 80 %. Se déclenche sur
          toute branche/PR.
+         ⚠️ La CI n'a pas de `.env` : sans `SECRET_KEY`, 16 tests échouent
+         (`ImproperlyConfigured`, constaté le 2026-09-24). Définir une clé factice dans le
+         YAML du job (`env: SECRET_KEY: cle-factice-pour-les-tests`) — non sensible, elle ne
+         sert qu'aux tests. La vraie clé de prod va uniquement dans les secrets de l'hébergeur.
       2. **containerize** : dépend du succès du job 1, uniquement sur push vers `master` ;
          build de l'image Docker, tag avec le hash de commit (+ `latest`), push vers
          Docker Hub (credentials via secrets GitHub Actions).
