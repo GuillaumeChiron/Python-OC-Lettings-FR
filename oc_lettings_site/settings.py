@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 from dotenv import load_dotenv
 
 from pathlib import Path
@@ -32,13 +33,17 @@ sentry_logging = LoggingIntegration(
     event_level=logging.WARNING,
 )
 
-sentry_sdk.init(
-    dsn=os.environ.get("SENTRY_DSN"),
-    integrations=[DjangoIntegration(), sentry_logging],
-    send_default_pii=False,
-    traces_sample_rate=1.0,
-    environment="development" if DEBUG else "production",
-)
+# Sentry is disabled when running tests so they don't send events
+TESTING = "pytest" in sys.modules
+
+if not TESTING:
+    sentry_sdk.init(
+        dsn=os.environ.get("SENTRY_DSN"),
+        integrations=[DjangoIntegration(), sentry_logging],
+        send_default_pii=False,
+        traces_sample_rate=1.0,
+        environment="development" if DEBUG else "production",
+    )
 
 
 ALLOWED_HOSTS = [
