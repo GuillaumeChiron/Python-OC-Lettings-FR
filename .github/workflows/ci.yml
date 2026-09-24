@@ -58,3 +58,14 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/oc-lettings:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/oc-lettings:${{ github.sha }}
+
+  deploy:
+    needs: containerize
+    # Uniquement sur un push vers master (pas sur les autres branches ni les PR)
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      # Le Deploy Hook demande à Render de récupérer l'image latest et de redémarrer
+      - name: Déploiement sur Render
+        run: curl --fail --silent --show-error -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
