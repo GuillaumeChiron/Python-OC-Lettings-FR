@@ -1,6 +1,10 @@
+[![Documentation Status](https://readthedocs.org/projects/python-oc-lettings-guillaumechiron/badge/?version=latest)](https://python-oc-lettings-guillaumechiron.readthedocs.io/fr/latest/)
+
 ## Résumé
 
 Site web d'Orange County Lettings
+
+La documentation technique complète est disponible sur [Read the Docs](https://python-oc-lettings-guillaumechiron.readthedocs.io/fr/latest/).
 
 ## Développement local
 
@@ -9,7 +13,7 @@ Site web d'Orange County Lettings
 - Compte GitHub avec accès en lecture à ce repository
 - Git CLI
 - SQLite3 CLI
-- Interpréteur Python, version 3.6 ou supérieure
+- Interpréteur Python, version 3.10 ou supérieure (projet testé avec Python 3.13)
 
 Dans le reste de la documentation sur le développement local, il est supposé que la commande `python` de votre OS shell exécute l'interpréteur Python ci-dessus (à moins qu'un environnement virtuel ne soit activé).
 
@@ -18,7 +22,7 @@ Dans le reste de la documentation sur le développement local, il est supposé q
 #### Cloner le repository
 
 - `cd /path/to/put/project/in`
-- `git clone https://github.com/OpenClassrooms-Student-Center/Python-OC-Lettings-FR.git`
+- `git clone https://github.com/GuillaumeChiron/Python-OC-Lettings-FR.git`
 
 #### Créer l'environnement virtuel
 
@@ -28,7 +32,7 @@ Dans le reste de la documentation sur le développement local, il est supposé q
 - Activer l'environnement `source venv/bin/activate`
 - Confirmer que la commande `python` exécute l'interpréteur Python dans l'environnement virtuel
 `which python`
-- Confirmer que la version de l'interpréteur Python est la version 3.6 ou supérieure `python --version`
+- Confirmer que la version de l'interpréteur Python est la version 3.10 ou supérieure `python --version`
 - Confirmer que la commande `pip` exécute l'exécutable pip dans l'environnement virtuel, `which pip`
 - Pour désactiver l'environnement, `deactivate`
 
@@ -40,7 +44,7 @@ Le projet utilise un fichier `.env` (non versionné, à la racine du projet) pou
 - Renseigner les valeurs suivantes dans `.env` :
   - `SECRET_KEY` : clé de signature interne à Django (sessions, tokens CSRF, etc.), obligatoire. Générer une valeur avec :
     `python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"`
-  - `DEBUG` : `True` en local pour afficher les erreurs détaillées, doit être `False` en production.
+  - `DEBUG` : mettre `True` en local pour afficher les erreurs détaillées et les fichiers statiques (avec `False`, le CSS ne s'affiche pas sans `python manage.py collectstatic`). Doit être `False` en production.
   - `ALLOWED_HOSTS` : noms de domaine autorisés à servir le site, séparés par des virgules. Valeur par défaut : `localhost,127.0.0.1`.
   - `SENTRY_DSN` : optionnelle. Si elle est absente, Sentry est simplement désactivé (le site fonctionne normalement, sans remontée d'erreurs). Pour l'obtenir :
     1. Créer un compte sur [sentry.io](https://sentry.io).
@@ -74,9 +78,9 @@ Le projet utilise un fichier `.env` (non versionné, à la racine du projet) pou
 - Ouvrir une session shell `sqlite3`
 - Se connecter à la base de données `.open oc-lettings-site.sqlite3`
 - Afficher les tables dans la base de données `.tables`
-- Afficher les colonnes dans le tableau des profils, `pragma table_info(Python-OC-Lettings-FR_profile);`
+- Afficher les colonnes dans le tableau des profils, `pragma table_info(profiles_profile);`
 - Lancer une requête sur la table des profils, `select user_id, favorite_city from
-  Python-OC-Lettings-FR_profile where favorite_city like 'B%';`
+  profiles_profile where favorite_city like 'B%';`
 - `.quit` pour quitter
 
 #### Panel d'administration
