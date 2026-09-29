@@ -88,6 +88,9 @@ Le projet utilise un fichier `.env` (non versionné, à la racine du projet) pou
 - Aller sur `http://localhost:8000/admin`
 - Connectez-vous avec l'utilisateur `admin`, mot de passe `Abc1234!`
 
+> Compte de démonstration : la base de données est publique et réinitialisée à chaque
+> déploiement. Ces identifiants ne doivent jamais protéger des données réelles.
+
 ### Windows
 
 Utilisation de PowerShell, comme ci-dessus sauf :
