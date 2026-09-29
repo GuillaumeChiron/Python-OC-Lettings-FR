@@ -1,3 +1,5 @@
+"""Point d'entrée ASGI du site pour les serveurs asynchrones"""
+
 import os
 
 from django.core.asgi import get_asgi_application

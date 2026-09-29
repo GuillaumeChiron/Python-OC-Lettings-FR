@@ -1,3 +1,5 @@
+"""Configuration du site : variables d'environnement, Sentry, logging et fichiers statiques"""
+
 import logging
 import os
 import sys

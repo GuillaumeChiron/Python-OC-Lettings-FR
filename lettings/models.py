@@ -7,7 +7,7 @@ from django.core.validators import MaxValueValidator, MinLengthValidator
 class Address(models.Model):
     """adresse postale associé à une location
 
-    ``state`` attend un code à 2 chiffres et ``country_iso_code```
+    ``state`` attend un code à 2 lettres et ``country_iso_code``
     un code ISO sur 3 lettres"""
 
     number = models.PositiveIntegerField(validators=[MaxValueValidator(9999)])
@@ -20,9 +20,12 @@ class Address(models.Model):
     )
 
     class Meta:
+        """Corrige le pluriel de Address affiché dans l'admin"""
+
         verbose_name_plural = "addresses"
 
     def __str__(self):
+        """Retourne le numéro et la rue de l'adresse"""
         return f"{self.number} {self.street}"
 
 
@@ -36,4 +39,5 @@ class Letting(models.Model):
     address = models.OneToOneField(Address, on_delete=models.CASCADE)
 
     def __str__(self):
+        """Retourne le titre de la location"""
         return self.title

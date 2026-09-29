@@ -1,3 +1,5 @@
+"""Tests du site : pages d'erreur 404 et 500 et parcours utilisateur global"""
+
 from django.contrib.auth.models import User
 from django.test import Client, TestCase, override_settings
 from django.urls import path, reverse

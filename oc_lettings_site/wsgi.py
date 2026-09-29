@@ -1,3 +1,5 @@
+"""Point d'entrée WSGI du site, utilisé par gunicorn en production"""
+
 import os
 
 from django.core.wsgi import get_wsgi_application
